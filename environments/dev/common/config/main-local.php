@@ -3,9 +3,9 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=yii2advanced',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => 'mysql:host=crossite.coewsrnjosl9.us-west-2.rds.amazonaws.com;dbname=crossite',
+            'username' => 'crossite',
+            'password' => 'crossite',
             'charset' => 'utf8',
         ],
         'mailer' => [
