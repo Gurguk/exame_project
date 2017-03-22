@@ -493,6 +493,8 @@ class CrosswordModel
     function getWords()
     {
         $result = array();
+        var_dump($this->items);
+        die;
         foreach($this->items as $item){
            if($item['axis']==1)
                $result[1][]=$item;
