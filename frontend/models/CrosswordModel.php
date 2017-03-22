@@ -150,10 +150,7 @@ class CrosswordModel
             }
         }
 
-        if ($this->_debug)
-            echo "ERROR: unable to generate {$this->max_words} words crossword (tried {$this->_full_tries} times)";
-
-        return false;
+        return true;
     }
 
     /**
