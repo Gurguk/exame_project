@@ -18,6 +18,6 @@ class CrossController extends Controller
         $model->buildCross($_REQUEST['category'], $_REQUEST['section'],$_REQUEST['max_words']);
 //        $cross = $model->getWords();
         $grid = $model->getHtml();
-        return $this->render('index',['cross'=>$cross,'grid'=>$grid]);
+        return $this->render('index',['cross'=>array(),'grid'=>$grid]);
     }
 }
