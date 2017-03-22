@@ -11,8 +11,6 @@ class CrossController extends Controller
 
     public function actionIndex()
     {
-        phpinfo();
-        die;
         $model = new CrosswordModel();
         $_REQUEST['category'] = 7;
         $_REQUEST['section'] = 3;
