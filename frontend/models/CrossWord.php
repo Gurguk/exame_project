@@ -48,10 +48,15 @@ class CrossWord
         $axis = $this->getCrossAxis();
 
         $cells = array();
-
-        for ($i = 0; $i < mb_strlen($this->word); $i++)
+//        echo '<pre>';
+//        var_dump(mb_strlen($this->word),$this->cells);
+//        die;
+        for ($i = 0; $i < mb_strlen($this->word); $i++){
+            if(isset($this->cells[$i]))
             if ($this->cells[$i]->canCross($axis))
                 $cells[] =&  $this->cells[$i];
+        }
+
 
         if (!count($cells) )
             $this->fully_crossed = true;
