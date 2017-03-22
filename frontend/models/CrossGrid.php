@@ -53,7 +53,7 @@ class CrossGrid
     function getCenterPos($axis, $word = '')
     {
         $n = $axis == CrossGlobalsVariables::CROSS_HORIZONTAL ? $this->cols : $this->rows;
-        $n-= mb_strlen($word);
+        $n = mb_strlen($word);
         $n = floor($n / 2);
         return $n;
     }
