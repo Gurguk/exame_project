@@ -86,8 +86,9 @@ class CrossGrid
             {
                 $cx = $s + $i;
                 $cell =& $this->cells[$cx][$cy];
-
+                if (is_object($cell))
                 $cell->setLetter(mb_substr($w->word, $i, 1), $axis, $this);
+                else break;
                 $w->cells[$i] =& $cell;
             }
 
