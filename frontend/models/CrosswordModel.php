@@ -146,9 +146,6 @@ class CrosswordModel
             if ($this->grid->countWords() == $this->max_words)
             {
                 $this->items = $this->getItems();
-
-                var_dump($this->items);
-                die;
                 return true;
             }
         }
