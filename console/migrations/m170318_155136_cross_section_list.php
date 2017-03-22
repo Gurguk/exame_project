@@ -14,7 +14,7 @@ class m170318_155136_cross_section_list extends Migration
         $this->createTable('{{%cross_section_list}}', [
             'id' => $this->primaryKey(),
             'id_category' => $this->integer()->notNull(),
-            'name' => $this->string()->notNull()->unique(),
+            'name' => $this->string()->notNull(),
         ], $tableOptions);
     }
 
