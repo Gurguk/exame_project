@@ -40,19 +40,19 @@ $this->title = 'My Yii Application';
                 <th>Вопрос</th>
             </tr>
             <tr><td colspan="2">По горизонтали</td></tr>
-<!--            --><?php //foreach ($cross[1] as $key=>$word): ?>
-<!--                <tr>-->
-<!--                    <td>--><?//=$key+1?><!--.</td>-->
-<!--                    <td align="left">--><?//=$word["question"]?><!--</td>-->
-<!--                </tr>-->
-<!--            --><?php //endforeach; ?>
-<!--            <tr><td colspan="2">По вертикали</td></tr>-->
-<!--            --><?php //foreach ($cross[2] as $key=>$word): ?>
-<!--                <tr>-->
-<!--                    <td>--><?//=$key+1?><!--.</td>-->
-<!--                    <td align="left">--><?//=$word["question"]?><!--</td>-->
-<!--                </tr>-->
-<!--            --><?php //endforeach; ?>
+            <?php foreach ($cross[1] as $key=>$word): ?>
+                <tr>
+                    <td><?=$key+1?>.</td>
+                    <td align="left"><?=$word["question"]?></td>
+                </tr>
+            <?php endforeach; ?>
+            <tr><td colspan="2">По вертикали</td></tr>
+            <?php foreach ($cross[2] as $key=>$word): ?>
+                <tr>
+                    <td><?=$key+1?>.</td>
+                    <td align="left"><?=$word["question"]?></td>
+                </tr>
+            <?php endforeach; ?>
 
         </table>
         <button class="show_letter">Слова</button>
