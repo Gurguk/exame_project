@@ -124,12 +124,35 @@ class CrossCell
         if($this->can_cross[$axis] && !$this->crossed)
         {
             if($axis==CrossGlobalsVariables::CROSS_HORIZONTAL){
-                if(($grid->cells[$this->x][$this->y+1]->letter || $grid->cells[$this->x][$this->y-1]->letter ))
-                    return false;
+                if(isset($grid->cells[$this->x][$this->y+1]) && isset($grid->cells[$this->x][$this->y-1])) {
+                    if (($grid->cells[$this->x][$this->y + 1]->letter || $grid->cells[$this->x][$this->y - 1]->letter))
+                        return false;
+                }
+                else
+                if(isset($grid->cells[$this->x][$this->y+1])){
+                    if (($grid->cells[$this->x][$this->y + 1]->letter))
+                        return false;
+                }
+                else
+                    if(isset($grid->cells[$this->x][$this->y-1])){
+                        if (($grid->cells[$this->x][$this->y-1]->letter))
+                            return false;
+                    }
             }
             else {
-                if(($grid->cells[$this->x+1][$this->y]->letter || $grid->cells[$this->x-1][$this->y]->letter ))
-                    return false;
+                if(isset($grid->cells[$this->x+1][$this->y]) && isset($grid->cells[$this->x-1][$this->y])) {
+                    if (($grid->cells[$this->x + 1][$this->y]->letter || $grid->cells[$this->x - 1][$this->y]->letter))
+                        return false;
+                }
+                if(isset($grid->cells[$this->x+1][$this->y])){
+                    if (($grid->cells[$this->x+1][$this->y]->letter))
+                        return false;
+                }
+                else
+                    if(isset($grid->cells[$this->x-1][$this->y])){
+                        if (($grid->cells[$this->x-1][$this->y]->letter))
+                            return false;
+                    }
             }
         }
         return !(!$this->can_cross[$axis] || ($this->crossed && $this->letter != $letter));
