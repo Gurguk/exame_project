@@ -36,7 +36,7 @@ class CrossGrid
     {
         for ($y = 0; $y < $this->rows; $y++)
             for ($x = 0; $x < $this->cols; $x++)
-                $this->cells[$x][$y] =& new CrossCell($x, $y);
+                $this->cells[$x][$y] = new CrossCell($x, $y);
     }
 
     /**
