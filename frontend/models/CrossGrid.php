@@ -63,7 +63,7 @@ class CrossGrid
      */
     function placeWord($word, $word_id, $x, $y, $axis)
     {
-        $w =& new CrossWord($word, $axis, $word_id, $this->cells[$x][$y]);
+        $w = new CrossWord($word, $axis, $word_id, $this->cells[$x][$y]);
 
         ++$this->maxinum;
         if($w->axis==1){
