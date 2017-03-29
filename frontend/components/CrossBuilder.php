@@ -19,7 +19,7 @@ class CrossBuilder
     public $grid;
     public $category;
     public $section;
-    public $max_full_tries = 2;
+    public $max_full_tries = 5;
     public $max_words = 15;
     public $items;
     public $max_tries = 5;
