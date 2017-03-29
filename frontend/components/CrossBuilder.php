@@ -382,9 +382,9 @@ class CrossBuilder
      */
     private function getMatchRegexp($str)
     {
-        $str = preg_replace("/^_*/e", "'^.{0,'.strlen('\\0').'}'", $str, 1);
-        $str = preg_replace("/_*$/e", "'.{0,'.strlen('\\0').'}$'", $str, 1);
-        $str = preg_replace("/_+/e", "'.{'.strlen('\\0').'}'", $str);
+        $str = preg_replace("/^_*/u", "'^.{0,'.strlen('\\0').'}'", $str, 1);
+        $str = preg_replace("/_*$/u", "'.{0,'.strlen('\\0').'}$'", $str, 1);
+        $str = preg_replace("/_+/u", "'.{'.strlen('\\0').'}'", $str);
         return $str;
     }
 
