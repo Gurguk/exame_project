@@ -19,7 +19,7 @@ class CrossBuilder
     public $grid;
     public $category;
     public $section;
-    public $max_full_tries = 5;
+    public $max_full_tries = 2;
     public $max_words = 15;
     public $items;
     public $max_tries = 5;
@@ -382,9 +382,9 @@ class CrossBuilder
      */
     private function getMatchRegexp($str)
     {
-        $str = preg_replace("/^_*/u", "'^.{0,'.strlen('\\0').'}'", $str, 1);
-        $str = preg_replace("/_*$/u", "'.{0,'.strlen('\\0').'}$'", $str, 1);
-        $str = preg_replace("/_+/u", "'.{'.strlen('\\0').'}'", $str);
+        @$str = preg_replace("/^_*/e", "'^.{0,'.strlen('\\0').'}'", $str, 1);
+        @$str = preg_replace("/_*$/e", "'.{0,'.strlen('\\0').'}$'", $str, 1);
+        @$str = preg_replace("/_+/e", "'.{'.strlen('\\0').'}'", $str);
         return $str;
     }
 
