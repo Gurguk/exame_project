@@ -28,34 +28,34 @@ $this->title = 'My Yii Application';
 <?php $this->registerJsFile('/frontend/web/js/cross.js',  ['depends' => [
     'yii\web\YiiAsset',
 ]]); ?>
-<div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Crossword generator!</h1>
-
+<!--<div class="site-index">-->
+<!---->
+<!--    <div class="jumbotron">-->
+<!--        <h1>Crossword generator!</h1>-->
+<!---->
         <?php echo $grid; ?>
-        <table border=1 align="center">
-            <tr>
-                <th>№</th>
-                <th>Вопрос</th>
-            </tr>
-            <tr><td colspan="2">По горизонтали</td></tr>
-            <?php foreach ($cross[1] as $key=>$word): ?>
-                <tr>
-                    <td><?=$key+1?>.</td>
-                    <td align="left"><?=$word["question"]?></td>
-                </tr>
-            <?php endforeach; ?>
-            <tr><td colspan="2">По вертикали</td></tr>
-            <?php foreach ($cross[2] as $key=>$word): ?>
-                <tr>
-                    <td><?=$key+1?>.</td>
-                    <td align="left"><?=$word["question"]?></td>
-                </tr>
-            <?php endforeach; ?>
-
-        </table>
-        <button class="show_letter">Слова</button>
-    </div>
-
-</div>
+<!--        <table border=1 align="center">-->
+<!--            <tr>-->
+<!--                <th>№</th>-->
+<!--                <th>Вопрос</th>-->
+<!--            </tr>-->
+<!--            <tr><td colspan="2">По горизонтали</td></tr>-->
+<!--            --><?php //foreach ($cross[1] as $key=>$word): ?>
+<!--                <tr>-->
+<!--                    <td>--><?//=$key+1?><!--.</td>-->
+<!--                    <td align="left">--><?//=$word["question"]?><!--</td>-->
+<!--                </tr>-->
+<!--            --><?php //endforeach; ?>
+<!--            <tr><td colspan="2">По вертикали</td></tr>-->
+<!--            --><?php //foreach ($cross[2] as $key=>$word): ?>
+<!--                <tr>-->
+<!--                    <td>--><?//=$key+1?><!--.</td>-->
+<!--                    <td align="left">--><?//=$word["question"]?><!--</td>-->
+<!--                </tr>-->
+<!--            --><?php //endforeach; ?>
+<!---->
+<!--        </table>-->
+<!--        <button class="show_letter">Слова</button>-->
+<!--    </div>-->
+<!---->
+<!--</div>-->
