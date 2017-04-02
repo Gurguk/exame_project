@@ -21,7 +21,6 @@ class CrossGrid extends ActiveRecord
         return [
             [['rows'], 'integer'],
             [['cols'], 'integer'],
-            [['maxinum'], 'integer'],
             [['totwords'], 'integer'],
             [['crossword'], 'integer'],
         ];
