@@ -19,10 +19,10 @@ class CrossBuilder
     public $grid;
     public $category;
     public $section;
-    public $max_full_tries = 5;
+    public $max_full_tries = 1;
     public $max_words = 15;
     public $items;
-    public $max_tries = 5;
+    public $max_tries = 15;
 
     public $match_line;
     public $full_tries = 0;
@@ -86,7 +86,7 @@ class CrossBuilder
             ->select('id')
             ->where(['id_category' => $this->category, 'id_section'=>$this->section])
             ->orderBy(new Expression('rand()'))
-            ->limit($this->max_words)
+            ->limit($this->max_words*2)
             ->asArray()
             ->all();
         return $words;
@@ -111,7 +111,7 @@ class CrossBuilder
      */
     private function generateFromWords($words_list)
     {
-        $_max_words = $this->max_words;
+        $max_words = $this->max_words;
         $this->insertWordsToTemp($words_list);
         $success = false;
         $required_words = count($words_list);
@@ -124,7 +124,8 @@ class CrossBuilder
 
             $required_words--;
         }
-        $this->setMaxWords($_max_words);
+        $this->setMaxWords($max_words);
+
         return $success;
     }
 
@@ -133,6 +134,7 @@ class CrossBuilder
      */
     private function generate()
     {
+
         $this->full_tries = 0;
         while ($this->full_tries < $this->max_full_tries)
         {
@@ -155,7 +157,7 @@ class CrossBuilder
      */
     private function resetGrid()
     {
-        $this->grid = new CrossGridActions($this->crossid);
+        $this->grid = new CrossGridActions($this->crossid,40,30);
         $this->tries = 0;
         $this->items = 0;
     }
@@ -166,9 +168,9 @@ class CrossBuilder
     private function placeFirstWord()
     {
         $word = $this->getRandomWord();
-        $x = $this->grid->getCenterPos(CrossGlobalsVariables::CROSS_HORIZONTAL, $word->value);
-        $y = $this->grid->getCenterPos(CrossGlobalsVariables::CROSS_VERTIKAL);
-        $this->grid->placeWord($word->value, $word->id, $x, $y, CrossGlobalsVariables::CROSS_HORIZONTAL);
+        $x = $this->grid->getCenterPos(CrossGlobalsVariables::CROSS_VERTIKAL);
+        $y = $this->grid->getCenterPos(CrossGlobalsVariables::CROSS_HORIZONTAL,$word->value);
+        $this->grid->placeWord($word->value, $word->id, $x, $y, CrossGlobalsVariables::CROSS_VERTIKAL);
     }
 
     /**
@@ -176,9 +178,9 @@ class CrossBuilder
      */
     private function autoGenerate()
     {
+
         while ($this->grid->countWords() < $this->max_words && $this->tries < $this->max_tries)
         {
-
             $this->tries++;
 
             $w = $this->grid->getRandomWord();
@@ -190,9 +192,9 @@ class CrossBuilder
                 }
             $axis = $w->getCrossAxis();
             $cells = $w->getCrossableCells($this->grid);
-
             while (count($cells))
             {
+
                 $n = array_rand($cells);
                 $cell = $cells[$n];
                 $list = $this->getWordWithStart($cell, $axis);
@@ -207,10 +209,10 @@ class CrossBuilder
 
                 $cells[$n]->setCanCross($axis, false);
                 unset($cells[$n]);
-            }
 
+            }
         }
-//        die;
+
     }
 
     /**
@@ -275,15 +277,15 @@ class CrossBuilder
 
         while ($can!=false);
         {
-//            echo '---------';
-//            var_dump($cell, $start, $end, $axis, $word['value'], $pos);
-//            echo '---------';
             $s_cell = $this->calcStartCell($cell, $start, $end, $axis, $word['value'], $pos);
-            @$s_cell = CrossCell::findOne($s_cell->cell_id);
+            if($s_cell){
+                $s_cell = CrossCell::findOne($s_cell->cell_id);
 
-            @$can = $this->grid->canPlaceWord($word['value'], $s_cell->x, $s_cell->y, $axis);
-            if($can)
-                $can=false;
+                $can = $this->grid->canPlaceWord($word['value'], $s_cell->x, $s_cell->y, $axis);
+                if($can)
+                    $can=false;
+            }
+
         }
 
         return array($word, $s_cell);
@@ -299,12 +301,14 @@ class CrossBuilder
         $min = $this->getMatchMin($this->match_line);
         $max = mb_strlen($this->match_line);
         $regexp = $this->getMatchRegexp($this->match_line);
-//        var_dump(' regexp='.$regexp);
+
         $rs = $this->loadWords($match, $min, $max);
-//        var_dump($cell);
+
         shuffle($rs);
         $word = '';
         $words = array();
+
+
         foreach($this->grid->words as $w){
             $words[]=$w->word;
         }
@@ -329,30 +333,31 @@ class CrossBuilder
      */
     private function getMatchLine($cell, $start, $end, $axis)
     {
+        $starts = microtime(true);
         $start = CrossCell::findOne($start->cell_id);
         $end = CrossCell::findOne($end->cell_id);
         $x = $start->x;
         $y = $start->y;
         $str = '';
+
         if ($axis == CrossGlobalsVariables::CROSS_HORIZONTAL)
         {
             $max = $end->x;
-            while ($x <= $max)
+            $range = range($x,$max);
+            $cells = CrossCell::find()->where(['y'=>$y, 'grid_id'=>$this->grid->grid_id ])->andWhere(['in','x',$range])->all();
+            foreach($cells as $cell)
             {
-                $cell = CrossCell::find()->where(['x'=>$x,'y'=>$y])->one();
                 $str.= mb_strlen($cell->letter) ? $cell->letter : '_';
-                $x++;
             }
         }
         else
         {
             $max = $end->y;
-            while ($y <= $max)
+            $range = range($y,$max);
+            $cells = CrossCell::find()->where(['x'=>$x, 'grid_id'=>$this->grid->grid_id ])->andWhere(['in','y',$range])->all();
+            foreach($cells as $cell)
             {
-
-                $cell = CrossCell::find()->where(['x'=>$x,'y'=>$y])->one();
                 $str.= mb_strlen($cell->letter) ? $cell->letter : '_';
-                $y++;
             }
         }
         return $str;
@@ -382,9 +387,10 @@ class CrossBuilder
      */
     private function getMatchRegexp($str)
     {
-        @$str = preg_replace("/^_*/e", "'^.{0,'.strlen('\\0').'}'", $str, 1);
-        @$str = preg_replace("/_*$/e", "'.{0,'.strlen('\\0').'}$'", $str, 1);
-        @$str = preg_replace("/_+/e", "'.{'.strlen('\\0').'}'", $str);
+        $str = preg_replace_callback("/^_*/", function($m) { return "^.{0,".strlen($m[0])."}"; }, $str, 1);
+        $str = preg_replace_callback("/_*$/", function($m) { return ".{0,".strlen($m[0])."}$"; }, $str, 1);
+        $str = preg_replace_callback("/_+/", function($m) { return ".{".strlen($m[0])."}"; }, $str);
+
         return $str;
     }
 
@@ -394,15 +400,24 @@ class CrossBuilder
     private function loadWords($match, $len_min, $len_max)
     {
         $used_words = $this->getUsedWords();
+        $crosstmplist = CrossTempList::find()->select('wordid')->where(['groupid'=>$this->crossid])->andWhere(['not in','wordid',$used_words])->all();
+        $arr = array();
+        foreach($crosstmplist as $val){
+            $arr[] = $val->wordid;
+        }
 
-        $sql = "SELECT id, value FROM cross_string_list WHERE 
-                  id IN (SELECT wordid FROM cross_temp_list WHERE wordid NOT IN (:words) AND groupid=:groupid) 
-                  AND length BETWEEN :len_min AND :len_max AND value LIKE :match";
-        $values = array(":words"=>implode(',',$used_words), ":groupid"=>$this->crossid, ":len_min"=>$len_min, ":len_max"=>$len_max, ":match"=>$match);
-        $connection = Yii::$app->getDb();
-        $command = $connection->createCommand($sql, $values);
-        $result = $command->queryAll();
+        $result = CrossStringList::find()->select(['id', 'value'])->where(['in','id',$arr])->andWhere(['between','length',$len_min,$len_max])->andWhere(['like','value',$match,false])->asArray()->all();
 
+//        die;
+//        $sql = "SELECT id, value FROM cross_string_list WHERE
+//                  id IN (SELECT wordid FROM cross_temp_list WHERE wordid NOT IN (:words) AND groupid=:groupid)
+//                  AND length BETWEEN :len_min AND :len_max AND value LIKE :match";
+//        $values = array(":words"=>implode(',',$used_words), ":groupid"=>$this->crossid, ":len_min"=>$len_min, ":len_max"=>$len_max, ":match"=>$match);
+//        $connection = Yii::$app->getDb();
+//        $command = $connection->createCommand($sql, $values);
+//        $result = $command->queryAll();
+//        var_dump($result);
+//        die;
         return $result;
     }
 
@@ -437,7 +452,7 @@ class CrossBuilder
             do
             {
                 $offset = isset($pos) ? $pos+1 : 0;
-                $pos = mb_strpos($word, $cell->letter, $offset);
+                @$pos = mb_strpos($word, $cell->letter, $offset);
                 $a = $l-$pos-1;
                 if ($pos <= $s && $a <= $e)
                 {
@@ -478,7 +493,7 @@ class CrossBuilder
     /**
      * Get crossword items array
      */
-    private function getItems()
+    function getItems()
     {
         $items = array();
         foreach ($this->grid->words as $val)
@@ -524,7 +539,8 @@ class CrossBuilder
     function getWords()
     {
         $result = array();
-        foreach($this->items as $item){
+        $words = $this->getItems();
+        foreach($words as $item){
             if($item['axis']==1)
                 $result[1][]=$item;
             if($item['axis']==2)
@@ -548,29 +564,28 @@ class CrossBuilder
         $color = "pink";
 
         $html = "<table border=0 class='crossTable' align='center'>";
-
-        for ($y = 0; $y < $grid->rows; $y++)
+        $count = 0;
+        for ($x = 0; $x < $grid->cols; $x++)
         {
-            $html.= "<tr align='center'>";
-
-            for ($x = 0; $x < $grid->cols; $x++)
+            $css = '';
+            $count = 0;
+            $tr = '';
+            for ($y = 0; $y < $grid->rows; $y++)
             {
-
                 $class = $cell[$x][$y]->letter!='' ? 'cellLetter' : 'cellEmpty';
-
+                if($class=='cellEmpty')
+                    $count+=1;
                 $color = "white";
 //                    $class = 'cellDebug';
-
-                $html .= "\n";
-
+                $tr .= "\n";
+                $tempinum = '';
                 if ($cell[$x][$y]->number!=0) {
                     $tempinum = $cell[$x][$y]->number;
-                    $html.= "<td class='cellNumber".$cellflag."' align='center' valign='middle'><b>".$tempinum."</b></td>";
                 }
-                elseif ($y == 0)
-                    $html.= "<td bgcolor='".$color."' class='".$class.$cellflag."'>&nbsp;</td>";
+                if ($y == 0)
+                    $tr.= "<td bgcolor='".$color."' class='".$class.$cellflag."'>&nbsp;</td>";
                 elseif ($x == 0)
-                    $html.= "<td bgcolor='".$color."' class='".$class.$cellflag."'>&nbsp;</td>";
+                    $tr.= "<td bgcolor='".$color."' class='".$class.$cellflag."'>&nbsp;</td>";
                 elseif ($cell[$x][$y]->letter!='')
                 {
                     if ($fillflag) {
@@ -578,11 +593,14 @@ class CrossBuilder
                     } else {
                         $letter="&nbsp;";
                     }
-                    $html.= "<td bgcolor='".$color."' class='".$class.$cellflag."'><span class='letter'>$letter</span><span class='field'><input type='text' size='1'></span></td>";
+                    $tr.= "<td bgcolor='".$color."' class='".$class.$cellflag."'><sup style=\"position: absolute; font-size: 75%;line-height: normal;top: initial;\">$tempinum</sup><span class='letter'><input type='text' size='1' value='$letter'></span><span class='field'><input type='text' size='1'></span></td>";
                 }
                 else
-                    $html.= "<td bgcolor='".$color."' class='".$class.$cellflag."'>&nbsp;</td>";
+                    $tr.= "<td bgcolor='".$color."' class='".$class.$cellflag."'>&nbsp;</td>";
             }
+            if($count==$grid->rows)
+                $css = 'style="display:none;"';
+            $html.= "<tr align='center' $css >".$tr;
             $html.= "</tr>";
         }
 

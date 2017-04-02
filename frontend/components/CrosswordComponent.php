@@ -8,21 +8,26 @@ use frontend\components\CrossBuilder;
 
 class CrosswordComponent extends Component
 {
+    public $cross;
+    public $grid_id;
 
-    public function GetGrid($category,$section,$max_words)
+    function __construct($category,$section,$max_words)
     {
-        $cross = new CrossBuilder($category, $section, $max_words);
-        $grid_id = $cross->buildCross();
-//        die;
-//        $grid_id = 2;
-        $return = $cross->getHtml($grid_id);
+        $this->cross = new CrossBuilder($category, $section, $max_words);
+    }
+
+    public function GetGrid()
+    {
+        $grid_id = $this->cross->buildCross();
+        $this->grid_id = $grid_id;
+        $return = $this->cross->getHtml($grid_id);
 
         return $return;
     }
 
     public function GetHtml()
     {
-        return "cross";
+        return $this->cross->getWords();
     }
 
 }

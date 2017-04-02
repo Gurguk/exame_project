@@ -98,7 +98,7 @@ class CrossGridActions
      */
     function getCenterPos($axis, $word = '')
     {
-        $n = $axis == CrossGlobalsVariables::CROSS_HORIZONTAL ? $this->cols : $this->rows;
+        $n = $axis == CrossGlobalsVariables::CROSS_VERTIKAL ? $this->cols : $this->rows;
         $n = $n - mb_strlen($word);
         $n = floor($n / 2);
         return $n;
@@ -131,8 +131,9 @@ class CrossGridActions
             {
                 $cx = $s + $i;
                 $cell = $this->cells[$cx][$cy];
-                if (is_object($cell))
+                if (is_object($cell)){
                     $cell->setLetter($w->id, mb_substr($w->word, $i, 1), $axis);
+                }
                 else
                     break;
                 if($i==0)
@@ -140,23 +141,21 @@ class CrossGridActions
                     $w->x = $cx;
                     $w->y = $cy;
                 }
-            }
 
+            }
             $cx = $s - 1;
             if ($cx >= 0 )
                 $this->cells[$cx][$cy]->setCanCross(CrossGlobalsVariables::CROSS_BOTH, false);
 
-            if($w->axis==1)
-                $this->cells[$cx][$cy]->SetNumber($w->id, $this->inum_h);
-            if($w->axis==2)
-                $this->cells[$cx][$cy]->SetNumber($w->id, $this->inum_v);
+            if($w->axis==CrossGlobalsVariables::CROSS_HORIZONTAL)
+                $this->cells[$cx+1][$cy]->SetNumber($w->id, $this->inum_h);
+            if($w->axis==CrossGlobalsVariables::CROSS_VERTIKAL)
+                $this->cells[$cx+1][$cy]->SetNumber($w->id, $this->inum_v);
 
             $cx = $s + mb_strlen($word);
             if(isset($this->cells[$cx][$cy])){
                 if (is_object($this->cells[$cx][$cy]))
                     $this->cells[$cx][$cy]->setCanCross(CrossGlobalsVariables::CROSS_BOTH, false);
-            }else{
-
             }
 
         }
@@ -183,9 +182,9 @@ class CrossGridActions
             if ($cy >= 0 )
                 $this->cells[$cx][$cy]->setCanCross(CrossGlobalsVariables::CROSS_BOTH, false);
             if($w->axis==1)
-                $this->cells[$cx][$cy]->SetNumber($w->id, $this->inum_h);
+                $this->cells[$cx][$cy+1]->SetNumber($w->id, $this->inum_h);
             if($w->axis==2)
-                $this->cells[$cx][$cy]->SetNumber($w->id, $this->inum_v);
+                $this->cells[$cx][$cy+1]->SetNumber($w->id, $this->inum_v);
 
             $cy = $s + mb_strlen($word);
             if(isset($this->cells[$cx][$cy]))
@@ -204,9 +203,9 @@ class CrossGridActions
     function getRandomWord()
     {
         $words = array();
-        $words_arr = CrossWord::find()->select('id')->where(['grid_id'=>$this->grid_id])->orderBy(['length'=>SORT_DESC])->all();
-        for ($i = 0; $i < count($words_arr); $i++){
-            $id = $words_arr[$i]->id;
+        $words_arr = $this->words;
+        foreach ($words_arr as $word){
+            $id = $word->id;
             if (!$this->words[$id]->isFullyCrossed($this))
                 $words[] = $id;
         }

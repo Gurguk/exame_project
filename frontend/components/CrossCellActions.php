@@ -4,6 +4,7 @@ namespace frontend\components;
 
 use common\models\CrossCell;
 use common\models\CrossGlobalsVariables;
+use common\models\CrossWord;
 
 class CrossCellActions
 {
@@ -23,12 +24,12 @@ class CrossCellActions
      */
     function setLetter($word_id, $letter, $axis)
     {
-        $cell = CrossCell::findOne($this->cell_id);
-        if (!$this->canSetLetter($letter, $axis))
-        {
-            echo "ERROR IN GRID:";
-            var_dump("Can't place letter '".$letter."' to cell [".$cell->x."x".$cell->y." cell_id= ".$this->cell_id."]");
-        }
+//        $cell = CrossCell::findOne($this->cell_id);
+//        if (!$this->canSetLetter($letter, $axis))
+//        {
+//            echo "ERROR IN GRID:";
+//            var_dump("Can't place letter '".$letter."' to cell [".$cell->x."x".$cell->y." cell_id= ".$this->cell_id."]");
+//        }
 
         $cell = CrossCell::findOne($this->cell_id);
         $cell->letter = $letter;
@@ -39,9 +40,8 @@ class CrossCellActions
             $cell->can_cross_v = 0;
         $cell->word_id = $word_id;
         $cell->save();
-
+        $starts1 = microtime(true);
         $this->updateNeighbours($axis);
-
         return $this->cell_id;
     }
 
@@ -53,7 +53,13 @@ class CrossCellActions
         $cell = CrossCell::findOne($this->cell_id);
         $cell->number = $number;
         $cell->word_id = $word_id;
+        $cell->can_cross_h = 0;
+        $cell->can_cross_v = 0;
+        $cell->crossed = 2;
         $cell->save();
+        $word = CrossWord::findOne($word_id);
+        $word->number = $number;
+        $word->save();
     }
 
     /**
@@ -62,11 +68,14 @@ class CrossCellActions
     private function updateNeighbours($axis)
     {
         $cell = CrossCell::findOne($this->cell_id);
+
         $x = $cell->x;
         $y = $cell->y;
         $grid_id = $cell->grid_id;
         $all = CrossCell::find()->where(['grid_id'=>$grid_id])->andWhere(['between', 'x', $x-1, $x+1 ])->andWhere(['between', 'y', $y-1, $y+1 ])->all();
         $grid = [];
+
+
         foreach($all as $one){
             $grid[$one->x][$one->y] = $one->id;
         };
@@ -86,7 +95,6 @@ class CrossCellActions
             $x+= 2;
             $this->setCanCross($axis, false, $grid[$x][$y]);
         }
-
     }
 
     /**
@@ -95,7 +103,6 @@ class CrossCellActions
     function canCross($axis)
     {
         $cell = CrossCell::findOne($this->cell_id);
-//        var_dump($cell);
         if($axis==CrossGlobalsVariables::CROSS_HORIZONTAL)
             return 	$cell->can_cross_h;
         else
@@ -111,6 +118,7 @@ class CrossCellActions
             $cell = CrossCell::findOne($this->cell_id);
         else
             $cell = CrossCell::findOne($cell_id);
+
         switch ($axis)
         {
             case CrossGlobalsVariables::CROSS_HORIZONTAL:
@@ -123,13 +131,13 @@ class CrossCellActions
 
             case CrossGlobalsVariables::CROSS_BOTH:
                 $cell->can_cross_h = $can;
-                $this->can_cross_v = $can;
+                $cell->can_cross_v = $can;
                 break;
 
             default:
                 die("INVALID AXIS FOR setCanCross");
         }
-        $cell->save();
+        $cell->save(false);
     }
 
     /**
@@ -154,10 +162,11 @@ class CrossCellActions
         foreach($all as $one){
             $grid[$one->x][$one->y] = $one->letter;
         }
-//        var_dump('let='.$let,' letter='.$letter,' x='.$x,' y='.$y);
+        if($closest->number!=0)
+            return false;
         if($can_cross && !$crossed)
         {
-            if($axis==CrossGlobalsVariables::CROSS_HORIZONTAL){
+            if($axis==CrossGlobalsVariables::CROSS_VERTIKAL){
                 if(isset($grid[$x][$y+1]) && isset($grid[$x][$y-1])) {
                     if (($grid[$x][$y+1]!='' || $grid[$x][$y-1]!=''))
                         return false;
@@ -188,10 +197,8 @@ class CrossCellActions
                             return false;
                     }
             }
-
         }
-        if($let!=$letter && $let!='')
-            return false;
+
         return !(!$can_cross || ($crossed && $let != $letter));
     }
 

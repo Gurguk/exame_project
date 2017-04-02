@@ -44,8 +44,6 @@ class CrossWordAction
         $word->word_id = $this->word_id;
         $word->axis = $this->axis;
         $word->fully_crossed = 0;
-        $word->inum_h = $this->inum_h;
-        $word->inum_v = $this->inum_v;
         $word->x = (int)$this->x;
         $word->y = (int)$this->y;
         $word->length = $this->length;
