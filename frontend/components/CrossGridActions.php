@@ -19,7 +19,6 @@ class CrossGridActions
     public $words 		= array();
     public $words_id 		= array();
     public $inum_v,$inum_h = 0;
-    public $maxinum 	= 0;
     public $totwords 	= 0;
     public $cross_id;
     public $grid_id;
@@ -45,7 +44,6 @@ class CrossGridActions
 
         $temp_grid->rows = $this->rows;
         $temp_grid->cols = $this->cols;
-        $temp_grid->maxinum = $this->maxinum;
         $temp_grid->totwords = $this->totwords;
         $temp_grid->crossword = $this->cross_id;
 
@@ -111,7 +109,6 @@ class CrossGridActions
     {
         $w = new CrossWordAction($word, $axis, $word_id, $x, $y, $this->grid_id);
         $this->words[$w->id] = $w;
-        ++$this->maxinum;
         if($w->axis==1){
             $this->inum_h = $this->inum_h+1;
         }
@@ -192,7 +189,6 @@ class CrossGridActions
                     $this->cells[$cx][$cy]->setCanCross(CrossGlobalsVariables::CROSS_BOTH, false);
         }
         $grid = CrossGrid::findOne($this->grid_id);
-        $grid->maxinum = $grid->maxinum+1;
         $grid->totwords = $grid->totwords+1;
         $grid->save();
     }
