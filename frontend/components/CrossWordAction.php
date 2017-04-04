@@ -2,8 +2,8 @@
 
 namespace frontend\components;
 
-use common\models\CrossCell;
-use common\models\CrossWord;
+use frontend\models\CrossCell;
+use frontend\models\CrossWord;
 use common\models\CrossGlobalsVariables;
 
 class CrossWordAction

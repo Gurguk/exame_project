@@ -2,9 +2,9 @@
 
 namespace frontend\components;
 
-use common\models\CrossCell;
+use frontend\models\CrossCell;
 use common\models\CrossGlobalsVariables;
-use common\models\CrossWord;
+use frontend\models\CrossWord;
 
 class CrossCellActions
 {

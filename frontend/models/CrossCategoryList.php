@@ -21,4 +21,16 @@ class CrossCategoryList extends ActiveRecord
             [['name'], 'string']
         ];
     }
+
+    public function getCrossGrid()
+    {
+        return $this->hasMany(CrossGrid::className(), ['category' => 'id']);
+    }
+
+    public function getCrossGridCount()
+    {
+        $cross_category_list = CrossGrid::find()->joinWith('crossCategoryList',true,'RIGHT JOIN')->where(['cross_grid.category'=>'cross_category_list.id','cross_grid.category'=>$this->id])->count();
+
+        return $cross_category_list ? $cross_category_list : '';
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace frontend\components;
 
-use common\models\CrossCell;
-use common\models\CrossGrid;
+use frontend\models\CrossCell;
+use frontend\models\CrossGrid;
 use common\models\CrossWord;
 use common\models\CrossGlobalsVariables;
 use frontend\components\CrossCellActions;
@@ -26,11 +26,13 @@ class CrossGridActions
     /**
      * Construct
      */
-    function __construct($cross_id, $rows = 20, $cols = 20)
+    function __construct($cross_id, $rows = 20, $cols = 20, $category, $section)
     {
         $this->rows = (int)$rows;
         $this->cols = (int)$cols;
         $this->cross_id = $cross_id;
+        $this->category = $category;
+        $this->section = $section;
         $this->initGrid();
         $this->initCells();
     }
@@ -46,7 +48,8 @@ class CrossGridActions
         $temp_grid->cols = $this->cols;
         $temp_grid->totwords = $this->totwords;
         $temp_grid->crossword = $this->cross_id;
-
+        $temp_grid->category = $this->category;
+        $temp_grid->section = $this->section;
         if ($temp_grid->save()) {
             $this->grid_id = $temp_grid->getPrimaryKey();
             return $this->grid_id;

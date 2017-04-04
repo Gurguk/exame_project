@@ -1,12 +1,9 @@
 <?php
 
-namespace common\models;
+namespace frontend\models;
 
 use yii\db\ActiveRecord;
 use yii\data\ActiveDataProvider;
-//use common\models\CrossCell;
-//use common\models\CrossWord;
-//use common\models\CrossGlobalsVariables;
 
 class CrossGrid extends ActiveRecord
 {
@@ -24,5 +21,17 @@ class CrossGrid extends ActiveRecord
             [['totwords'], 'integer'],
             [['crossword'], 'integer'],
         ];
+    }
+
+    public function getCrossCategoryList()
+    {
+        return $this->hasOne(CrossCategoryList::className(), ['id' => 'category']);
+    }
+
+    public function getCrossCategoryListName()
+    {
+        $cross_category_list = $this->crossCategoryList;
+
+        return $cross_category_list ? $cross_category_list->name : '';
     }
 }

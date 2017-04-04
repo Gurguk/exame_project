@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Controller;
 use frontend\components\CrosswordComponent;
+use frontend\models\CrossCategoryList;
+use frontend\models\CrossGrid;
 
 class CrossController extends Controller
 {
@@ -20,5 +22,18 @@ class CrossController extends Controller
         $cross = $crossword->GetHtml();
 
         return $this->render('index',['grid'=>$grid, 'cross'=>$cross]);
+    }
+
+    /**
+     * Displays homepage.
+     *
+     * @return mixed
+     */
+    public function actionReady()
+    {
+        $data = CrossCategoryList::find()->all();
+//        var_dump($data->crossGridCount);
+
+        return $this->render('ready',['data'=>$data]);
     }
 }

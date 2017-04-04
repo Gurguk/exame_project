@@ -3,16 +3,15 @@
 
 namespace frontend\components;
 
-use common\models\CrossCell;
-use common\models\CrossGrid;
-use common\models\CrossWord;
+use frontend\models\CrossCell;
+use frontend\models\CrossGrid;
+use frontend\models\CrossWord;
 use Yii;
 use frontend\models\CrossStringList;
 use frontend\models\CrossTempList;
 use common\models\CrossGlobalsVariables;
 use frontend\components\CrossGridActions;
 use yii\db\Expression;
-//use common\models\CrossGlobalsVariables;
 
 class CrossBuilder
 {
@@ -157,7 +156,7 @@ class CrossBuilder
      */
     private function resetGrid()
     {
-        $this->grid = new CrossGridActions($this->crossid,40,30);
+        $this->grid = new CrossGridActions($this->crossid,40,30,$this->category, $this->section);
         $this->tries = 0;
         $this->items = 0;
     }

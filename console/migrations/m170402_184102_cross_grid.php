@@ -16,6 +16,8 @@ class m170402_184102_cross_grid extends Migration
             'rows' => $this->integer(2)->notNull(),
             'cols' => $this->integer(2)->notNull(),
             'totwords' => $this->integer(3)->notNull(),
+            'category' => $this->integer(11)->notNull(),
+            'section' => $this->integer(11)->notNull(),
             'crossword' => $this->integer(11)->notNull(),
         ], $tableOptions);
     }
