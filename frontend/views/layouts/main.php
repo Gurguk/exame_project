@@ -35,8 +35,8 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/cross/form']],
-        ['label' => 'Кроссворд', 'url' => ['/cross/index']],
+        ['label' => 'Створити кроссворд', 'url' => ['/cross/form']],
+        ['label' => 'Історія кроссвордів', 'url' => ['/cross/history']],
         ['label' => 'Готові кроссворди', 'url' => ['/cross/ready']],
     ];
     if (Yii::$app->user->isGuest) {

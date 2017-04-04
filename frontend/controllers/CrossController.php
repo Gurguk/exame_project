@@ -54,4 +54,14 @@ class CrossController extends Controller
 
         return $this->render('ready',['data'=>$data]);
     }
+
+    public function actionHistory()
+    {
+        $data = CrossCategoryList::find()->all();
+//        var_dump($data->crossGridCount);
+
+        return $this->render('ready',['data'=>$data]);
+    }
+
+
 }

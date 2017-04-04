@@ -86,10 +86,10 @@ class CrossBuilder
             ->select('id')
             ->where(['id_category' => $this->category, 'id_section'=>$this->section])
             ->orderBy(new Expression('rand()'))
-            ->limit($this->max_words*2)
+            ->limit($this->max_words*5)
             ->asArray()
             ->all();
-        
+
         return $words;
     }
 
