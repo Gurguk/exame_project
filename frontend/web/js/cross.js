@@ -12,7 +12,7 @@ jQuery( document ).ready(function() {
             return false;
         }
         jQuery(this).val(jQuery(this).val().toUpperCase());
-        if(jQuery(this).val()==jQuery(this).parent('span').parent('td').find('.letter').text()) {
+        if(jQuery(this).val()==jQuery(this).parent('span').parent('td').find('.letter input').val()) {
             jQuery(this).css('background', '#b4dcaf');
         }
         else

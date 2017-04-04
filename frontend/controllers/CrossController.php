@@ -57,10 +57,20 @@ class CrossController extends Controller
 
     public function actionHistory()
     {
-        $data = CrossCategoryList::find()->all();
+        $data = CrossGrid::find()->all();
 //        var_dump($data->crossGridCount);
 
-        return $this->render('ready',['data'=>$data]);
+        return $this->render('history',['data'=>$data]);
+    }
+
+    public function actionShow()
+    {
+        $crossword = new CrosswordComponent();
+        $id = Yii::$app->request->get('cross_id');
+        $grid = $crossword->GetGrid($id);
+        $cross = $crossword->GetHtml($id);
+
+        return $this->render('index',['grid'=>$grid, 'cross'=>$cross]);
     }
 
 

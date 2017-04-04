@@ -494,10 +494,13 @@ class CrossBuilder
     /**
      * Get crossword items array
      */
-    function getItems()
+    function getItems($grid_id = 0)
     {
+        if($grid_id==0)
+            $grid_id = $this->grid->grid_id;
         $items = array();
-        foreach ($this->grid->words as $val)
+        $words = CrossWord::find()->where(['grid_id'=>$grid_id])->all();
+        foreach ($words as $val)
         {
             $word = $val;
             $w = CrossWord::findOne($word->id);
@@ -537,10 +540,10 @@ class CrossBuilder
      * Get crossword items
      * @return array
      */
-    function getWords()
+    function getWords($grid_id = 0)
     {
         $result = array();
-        $words = $this->getItems();
+        $words = $this->getItems($grid_id);
         foreach($words as $item){
             if($item['axis']==1)
                 $result[1][]=$item;

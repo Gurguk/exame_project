@@ -5,25 +5,7 @@
 $this->title = 'My Yii Application';
 ?>
 <style>
-    body, td { font-family: Courier; font-size: 10pt; }
-    .crossTable { border-spacing:0px;  border-collapse: collapse; }
-    .cellEmpty {  padding: 0px; }
-    .cellNumber { padding: 1px; background-color: #FFFFFF; border: 0px solid #000000; width: 20px; height: 20px; }
-    .cellLetter { padding: 1px; background-color: #EEEEEE; border: 1px solid #000000; width: 20px; height: 20px; }
-    .crossTableA { border-spacing:0px;  border-collapse: collapse; }
-    .cellEmptyA {  padding: 0px; }
-    .cellNumberA { padding: 1px; background-color: #FFFFFF; border: 0px solid #000000; width: 30px; height: 30px; }
-    .cellLetterA { padding: 1px; background-color: #EEEEEE; border: 1px solid #000000; width: 30px; height: 30px; }
-    .cellDebugA { padding: 1px; border: 1px solid #000000; width: 30px; height: 30px; }
-    .letter{ display: none;}
-    .field input, .letter input {
-        border: 0;
-        width: 27px;
-        height: 27px;
-        background: #eeeeee;
-        text-align: center;
-        outline: none;
-    }
+
 </style>
 <?php $this->registerJsFile('/frontend/web/js/cross.js',  ['depends' => [
     'yii\web\YiiAsset',
@@ -36,23 +18,23 @@ $this->title = 'My Yii Application';
         <h1>Crossword generator!</h1>
 
         <?php echo $grid; ?>
-        <table border=1 align="center">
-            <tr>
-                <th>№</th>
-                <th>Вопрос</th>
+        <table border=1 align="center" class="question-table">
+            <tr class="table-header">
+                <th class="number">№</th>
+                <th class="question">Вопрос</th>
             </tr>
-            <tr><td colspan="2">По горизонтали</td></tr>
-            <?php foreach ($cross[1] as $key=>$word): ?>
-                <tr>
-                    <td><?=$key+1?>.</td>
-                    <td align="left"><?=$word['question']?></td>
+            <tr class="table-gorizontal-header"><td colspan="2" class="gorizontal">По горизонтали</td></tr>
+            <?php foreach ($cross[2] as $key=>$word): ?>
+                <tr class="table-gorizontal">
+                    <td class="number"><?=$key+1?>.</td>
+                    <td class="question" align="left"><?=$word['question']?></td>
                 </tr>
             <?php endforeach; ?>
-            <tr><td colspan="2">По вертикали</td></tr>
-            <?php foreach ($cross[2] as $key=>$word): ?>
-                <tr>
-                    <td><?=$key+1?>.</td>
-                    <td align="left"><?=$word['question']?></td>
+            <tr class="table-vertical-header"><td colspan="2" class="vertical">По вертикали</td></tr>
+            <?php foreach ($cross[1] as $key=>$word): ?>
+                <tr class="table-vertical">
+                    <td class="number"><?=$key+1?>.</td>
+                    <td class="question" align="left"><?=$word['question']?></td>
                 </tr>
             <?php endforeach; ?>
 
