@@ -39,7 +39,7 @@ $this->title = 'My Yii Application';
             <?php endforeach; ?>
 
         </table>
-        <button class="show_letter">Слова</button>
+        <button class="show_letter btn btn-success">Ответы</button>
     </div>
 
 </div>
