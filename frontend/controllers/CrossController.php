@@ -18,7 +18,7 @@ class CrossController extends Controller
     {
         $category = Yii::$app->request->post('CrossCategoryList');
         $section = Yii::$app->request->post('CrossSectionList');
-        $crossword = new CrosswordComponent($category['id'], $section['id'],20);
+        $crossword = new CrosswordComponent($category['id'], $section['id'],15);
         $grid = $crossword->GetGrid();
         $cross = $crossword->GetHtml();
 
