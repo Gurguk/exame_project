@@ -35,7 +35,7 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Home', 'url' => ['/cross/form']],
         ['label' => 'Кроссворд', 'url' => ['/cross/index']],
         ['label' => 'Готові кроссворди', 'url' => ['/cross/ready']],
     ];

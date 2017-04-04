@@ -27,6 +27,11 @@ class CrossCategoryList extends ActiveRecord
         return $this->hasMany(CrossGrid::className(), ['category' => 'id']);
     }
 
+    public function getCrossSectionList()
+    {
+        return $this->hasMany(CrossSectionList::className(), ['id_category' => 'id']);
+    }
+
     public function getCrossGridCount()
     {
         $cross_category_list = CrossGrid::find()->joinWith('crossCategoryList',true,'RIGHT JOIN')->where(['cross_grid.category'=>'cross_category_list.id','cross_grid.category'=>$this->id])->count();

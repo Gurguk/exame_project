@@ -22,4 +22,9 @@ class CrossSectionList extends ActiveRecord
             [['name'], 'string']
         ];
     }
+
+    public function getCrossSectionList()
+    {
+        return $this->hasOne(CrossSectionList::className(), ['id' => 'id_category']);
+    }
 }

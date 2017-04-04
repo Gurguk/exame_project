@@ -44,7 +44,7 @@ class CrossStringList extends ActiveRecord
                 $rows[] = [
                     'id',
                     'id_category' => 1,
-                    'id_section' => 1,
+                    'id_section' => 4,
                     'length' => mb_strlen($val['word']),
                     'value' => $val['word'],
                     'url' => $val['question']

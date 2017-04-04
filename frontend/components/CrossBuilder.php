@@ -34,8 +34,8 @@ class CrossBuilder
      */
     function __construct($category, $section, $max_words)
     {
-        $this->category = $category;
-        $this->section = $section;
+        $this->category = (int)$category;
+        $this->section = (int)$section;
         $this->max_words = $max_words;
     }
 
@@ -46,6 +46,7 @@ class CrossBuilder
     {
         $this->createCrossID();
         $words = $this->getWordsList();
+
         $cross = $this->generateFromWords($words);
 
         return $this->grid->grid_id;
@@ -88,6 +89,7 @@ class CrossBuilder
             ->limit($this->max_words*2)
             ->asArray()
             ->all();
+        
         return $words;
     }
 

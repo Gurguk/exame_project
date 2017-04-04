@@ -21,8 +21,26 @@ jQuery( document ).ready(function() {
             else
                 jQuery(this).css('background','#d09292');
     });
+
     jQuery(document).on('click','.show_letter',function(){
         jQuery('.letter').toggle();
         jQuery('.field input').toggle();
+    });
+
+    jQuery(document).on('change','#crosscategorylist-id',function(){
+        jQuery('#section').empty();
+        if(jQuery(this).val()!='')
+            jQuery.ajax({
+                url: "index.php?r=cross/sections",
+                dataType: "json",
+                method: "POST",
+                data: {id:jQuery(this).val()},
+                success: function(data){
+                    jQuery('#section').append(data.select);
+                },
+                error: function () {
+                    alert("ERROR");
+                }
+            });
     });
 });
