@@ -7,6 +7,8 @@ $this->title = 'My Yii Application';
 
     $site_url = 'http://www.kotvet.ru/odn/1';
     $userAgent = 'Mozilla/5.0 (Windows NT 6.1; rv:9.0.1) Gecko/20100101 Firefox/9.0.1';;
+    phpinfo();
+die;
     $site_ch = curl_init();
     curl_setopt($site_ch, CURLOPT_USERAGENT, $userAgent);
     curl_setopt($site_ch, CURLOPT_URL,$site_url);
